@@ -23,7 +23,7 @@ class RelatedPeople(models.Model):
         return self.name
 
 class RelatedYears(models.Model):
-    year = models.CharField(max_length=10)
+    year = models.CharField(max_length=11)
     def __unicode__(self):
         return self.year
 
@@ -42,43 +42,43 @@ class Neighborhoods(models.Model):
     def __unicode__(self):
         return self.name
 
-class MapFeature(models.Model):
+class MapFeatures(models.Model):
     feature = models.CharField(max_length=128)
     def __unicode__(self):
         return self.feature
 
 class Address(models.Model):
-    address_1 = models.CharField(_("address"), max_length=128)
-    address_2 = models.CharField(_("address cont'd"), max_length=128, blank=True)
+    address_1 = models.CharField(_("address"), max_length=128, null=True, blank=True)
+    address_2 = models.CharField(_("address cont'd"), max_length=128, null=True, blank=True)
     city = models.CharField(_("city"), max_length=64, default="Brooklyn")
     state = models.CharField(_("state"), default="NY", max_length=2)
-    zip_code = models.CharField(_("zip code"), max_length=5, default="11216")
+    zip_code = models.CharField(_("zip code"), max_length=5, default="112", null=True, blank=True)
     def __unicode__(self):
         return self.address_1
 
 
 class Location(models.Model):
-    name = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=200)
     neighborhood = models.ManyToManyField(Neighborhoods, null=True, blank=True)
     address = models.ForeignKey(Address, null=True, blank=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    place_category = models.ForeignKey(PlaceCategory, null=True)
-    map_feature = models.ForeignKey(MapFeature, null=True)
+    latitude = models.DecimalField(max_digits=12, decimal_places=9, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=12, decimal_places=9, null=True, blank=True)
+    place_category = models.ForeignKey(PlaceCategory, null=True, blank=True)
+    map_features = models.ManyToManyField(MapFeatures, blank=True)
     images = models.ManyToManyField(Images, blank=True)
     def __unicode__(self):
-		return self.name
+		return unicode(self.name)
 
 class Event(models.Model):
-    extract = models.CharField(max_length=200)
+    extract = models.CharField(max_length=201)
     beginning_time = models.IntegerField(null=True, blank=True)
     location = models.ManyToManyField(Location, blank=True)
-    stage = models.ManyToManyField(RelatedStages,blank=True)
-    themes = models.ManyToManyField(Themes,blank=True)
+    stage = models.ManyToManyField(RelatedStages, blank=True)
+    themes = models.ManyToManyField(Themes, blank=True)
     years = models.ManyToManyField(RelatedYears, blank=True)
     people = models.ManyToManyField(RelatedPeople, blank=True)
     things = models.ManyToManyField(RelatedThings, blank=True)
-    images = models.ManyToManyField(Images,blank=True)
+    images = models.ManyToManyField(Images, blank=True)
     def __unicode__(self):
 		return self.extract
 

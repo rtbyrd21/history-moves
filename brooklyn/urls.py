@@ -20,4 +20,5 @@ from django.conf.urls import include
 urlpatterns = [
     url(r'^interviews/', include('interviews.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^api/', include('interviews.urls')),
 ]
